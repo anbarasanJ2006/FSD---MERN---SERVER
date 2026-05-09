@@ -55,7 +55,11 @@ router.post("/", async (req, res) => {
 // This section will help you update a record by id.
 router.patch("/:id", async (req, res) => {
   try {
-    const query = { _id: new ObjectId(req.params.id) };
+    const id = req.params.id;
+    console.log("PATCH /record/:id called with ID:", id);
+    console.log("Body received:", req.body);
+    
+    const query = { _id: new ObjectId(id) };
     const updates = {
       $set: {
         name: req.body.name,
@@ -64,9 +68,15 @@ router.patch("/:id", async (req, res) => {
       },
     };
 
+    console.log("Query:", query);
+    console.log("Updates:", updates);
+
+    const db = await initDB();
     let collection = await db.collection("records");
     let result = await collection.updateOne(query, updates);
-    res.send(result).status(200);
+    
+    console.log("Update result:", result);
+    res.status(200).send(result);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error updating record");
