@@ -28,6 +28,7 @@ router.get("/:id", async (req, res) => {
     else res.send(result).status(200);
   } catch (err) {
     res.status(500).send(err.message);
+    const db = await initDB();
   }
 });
 
